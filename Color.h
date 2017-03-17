@@ -2,75 +2,105 @@
 #define _COLOR_H
 
 class Color {
-	double red, green, blue, special;
-	
-	public:
-	
-	Color ();
-	
-	Color (double, double, double, double);
-	
-	// method functions
-	double getColorRed() { return red; }
-	double getColorGreen() { return green; }
-	double getColorBlue() { return blue; }
-	double getColorSpecial() { return special; }
-	
-	double setColorRed(double redValue) { red = redValue; }
-	double setColorGreen(double greenValue) { green = greenValue; }
-	double setColorBlue(double blueValue) { blue = blueValue; }
-	double setColorSpecial(double specialValue) { special = specialValue; }
-	
-	double brightness() {
-		return(red + green + blue)/3;
+	double r	= 0.5;
+	double g	= 0.5;
+	double b	= 0.5;
+
+	double special	= 0;
+
+public:
+	Color() = default;
+
+	Color(double const r, double const g, double const b, double const special = 0) :
+			r(r),
+			g(g),
+			b(b),
+			special(special){}
+
+public:
+	double getColorRed()		const { return r; }
+	double getColorGreen()		const { return g; }
+	double getColorBlue()		const { return b; }
+	double getColorSpecial()	const { return special; }
+
+	double setColorRed(double rv) { r = rv; }
+	double setColorGreen(double gv) { g = gv; }
+	double setColorBlue(double bv) { b = bv; }
+	double setColorSpecial(double sv) { special = sv; }
+
+	double brightness() const {
+		return(r + g + b) / 3;
 	}
-	
-	Color colorScalar(double scalar) {
-		return Color (red*scalar, green*scalar, blue*scalar, special);
+
+	Color colorScalar(double const scalar) const{
+		return Color(
+				r * scalar,
+				g * scalar,
+				b * scalar,
+				special
+		);
 	}
-	
-	Color colorAdd(Color color) {
-		return Color (red + color.getColorRed(), green + color.getColorGreen(), blue + color.getColorBlue(), special);
+
+	Color colorAdd(const Color &color) const{
+		return Color(
+				r + color.r,
+				g + color.g,
+				b + color.b,
+				special
+		);
 	}
-	
-	Color colorMultiply(Color color) {
-		return Color (red*color.getColorRed(), green*color.getColorGreen(), blue*color.getColorBlue(), special);
+
+	Color colorMultiply(const Color &color) const{
+		return Color(
+				r * color.r,
+				g * color.g,
+				b * color.b,
+				special
+		);
 	}
-	
-	Color colorAverage(Color color) {
-		return Color ((red + color.getColorRed())/2, (green + color.getColorGreen())/2, (blue + color.getColorBlue())/2, special);
+
+	Color colorAverage(const Color &color) const{
+		return Color(
+			(r + color.r) / 2,
+			(g + color.g) / 2,
+			(b + color.b) / 2,
+			special
+		);
 	}
-	
-	Color clip() {
-		double alllight = red + green + blue;
-		double excesslight = alllight - 3;
+
+	Color clip() const{
+		double const alllight    = r + g + b;
+		double const excesslight = alllight - 3;
+
+		double rr = r;
+		double gg = g;
+		double bb = b;
+
 		if (excesslight > 0) {
-			red = red + excesslight*(red/alllight);
-			green = green + excesslight*(green/alllight);
-			blue = blue + excesslight*(blue/alllight);
+			rr += excesslight * (r / alllight);
+			gg += excesslight * (g / alllight);
+			bb += excesslight * (b / alllight);
 		}
-		if (red > 1) {red = 1;}
-		if (green > 1) {green = 1;}
-		if (blue > 1) {blue = 1;}
-		if (red < 0) {red = 0;}
-		if (green < 0) {green = 0;}
-		if (blue < 0) {blue = 0;}
-		
-		return Color (red, green, blue, special);
+
+		return Color(
+			clamp_(rr),
+			clamp_(gg),
+			clamp_(bb),
+			special
+		);
+	}
+
+private:
+	template <typename T>
+	static T clamp_(T const val, T const min = 0, T const max = 1){
+		if (val < min)
+			return min;
+
+		if (val > max)
+			return max;
+
+		return val;
 	}
 };
-
-Color::Color () {
-	red = 0.5;
-	green = 0.5;
-	blue = 0.5;
-}
-
-Color::Color (double r, double g, double b, double s) {
-	red = r;
-	green = g;
-	blue = b;
-	special = s;
-}
 
 #endif
