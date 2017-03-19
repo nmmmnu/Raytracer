@@ -1,98 +1,13 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <cmath>
-#include <limits>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-
-#include "Vect.h"
-#include "Ray.h"
 #include "Camera.h"
-#include "Color.h"
 #include "Light.h"
-#include "Object.h"
 #include "Sphere.h"
 #include "Plane.h"
 
+#include "RGB.h"
 
-using namespace std;
-
-struct RGBType {
-	double r;
-	double g;
-	double b;
-};
-
-void savebmp (const char *filename, int w, int h, int dpi, RGBType *data) {
-	FILE *f;
-	int k = w*h;
-	int s = 4*k;
-	int filesize = 54 + s;
-
-	double factor = 39.375;
-	int m = static_cast<int>(factor);
-
-	int ppm = dpi*m;
-
-	unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0,0,0, 54,0,0,0};
-	unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0,24,0};
-
-	bmpfileheader[ 2] = (unsigned char)(filesize);
-	bmpfileheader[ 3] = (unsigned char)(filesize>>8);
-	bmpfileheader[ 4] = (unsigned char)(filesize>>16);
-	bmpfileheader[ 5] = (unsigned char)(filesize>>24);
-
-	bmpinfoheader[ 4] = (unsigned char)(w);
-	bmpinfoheader[ 5] = (unsigned char)(w>>8);
-	bmpinfoheader[ 6] = (unsigned char)(w>>16);
-	bmpinfoheader[ 7] = (unsigned char)(w>>24);
-
-	bmpinfoheader[ 8] = (unsigned char)(h);
-	bmpinfoheader[ 9] = (unsigned char)(h>>8);
-	bmpinfoheader[10] = (unsigned char)(h>>16);
-	bmpinfoheader[11] = (unsigned char)(h>>24);
-
-	bmpinfoheader[21] = (unsigned char)(s);
-	bmpinfoheader[22] = (unsigned char)(s>>8);
-	bmpinfoheader[23] = (unsigned char)(s>>16);
-	bmpinfoheader[24] = (unsigned char)(s>>24);
-
-	bmpinfoheader[25] = (unsigned char)(ppm);
-	bmpinfoheader[26] = (unsigned char)(ppm>>8);
-	bmpinfoheader[27] = (unsigned char)(ppm>>16);
-	bmpinfoheader[28] = (unsigned char)(ppm>>24);
-
-	bmpinfoheader[29] = (unsigned char)(ppm);
-	bmpinfoheader[30] = (unsigned char)(ppm>>8);
-	bmpinfoheader[31] = (unsigned char)(ppm>>16);
-	bmpinfoheader[32] = (unsigned char)(ppm>>24);
-
-	f = fopen(filename,"wb");
-
-	fwrite(bmpfileheader,1,14,f);
-	fwrite(bmpinfoheader,1,40,f);
-
-	for (int i = 0; i < k; i++) {
-		RGBType rgb = data[i];
-
-		double red = (data[i].r)*255;
-		double green = (data[i].g)*255;
-		double blue = (data[i].b)*255;
-
-		unsigned char color[3] = {(int)floor(blue),(int)floor(green),(int)floor(red)};
-
-		fwrite(color,1,3,f);
-	}
-
-	fclose(f);
-}
-
-int winningObjectIndex(vector<double> object_intersections) {
+int winningObjectIndex(std::vector<double> object_intersections) {
 	// return the index of the winning intersection
 	int index_of_minimum_value;
 
@@ -141,7 +56,7 @@ int winningObjectIndex(vector<double> object_intersections) {
 	}
 }
 
-Color getColorAt(Vect intersection_position, Vect intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<Light*> light_sources, double accuracy, double ambientlight) {
+Color getColorAt(Vect intersection_position, Vect intersecting_ray_direction, std::vector<Object*> scene_objects, int index_of_winning_object, std::vector<Light*> light_sources, double accuracy, double ambientlight) {
 
 	Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
 	Vect winning_object_normal = scene_objects.at(index_of_winning_object)->getNormalAt(intersection_position);
@@ -179,7 +94,7 @@ Color getColorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
 		Ray reflection_ray (intersection_position, reflection_direction);
 
 		// determine what the ray intersects with first
-		vector<double> reflection_intersections;
+		std::vector<double> reflection_intersections;
 
 		for (int reflection_index = 0; reflection_index < scene_objects.size(); reflection_index++) {
 			reflection_intersections.push_back(scene_objects.at(reflection_index)->findIntersection(reflection_ray));
@@ -217,7 +132,7 @@ Color getColorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
 
 			Ray shadow_ray (intersection_position, light_sources.at(light_index)->getLightPosition().vectAdd(intersection_position.negative()).normalize());
 
-			vector<double> secondary_intersections;
+			std::vector<double> secondary_intersections;
 
 			for (int object_index = 0; object_index < scene_objects.size() && shadowed == false; object_index++) {
 				secondary_intersections.push_back(scene_objects.at(object_index)->findIntersection(shadow_ray));
@@ -259,19 +174,14 @@ Color getColorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
 	return final_color.clip();
 }
 
-int thisone;
-
 int main (int argc, char *argv[]) {
-	cout << "rendering ..." << endl;
+	std::cout << "rendering ..." << '\n';
 
-	clock_t t1, t2;
-	t1 = clock();
+	int const width  = 640;
+	int const height = 480;
 
-	int dpi = 72;
-	int width = 640;
-	int height = 480;
-	int n = width*height;
-	RGBType *pixels = new RGBType[n];
+	RGBVector pixels;
+//	pixels.reserve(width * height);
 
 	int aadepth = 1;
 	double aathreshold = 0.1;
@@ -305,33 +215,33 @@ int main (int argc, char *argv[]) {
 
 	Vect light_position (-7,10,-10);
 	Light scene_light (light_position, white_light);
-	vector<Light*> light_sources;
+	std::vector<Light*> light_sources;
 	light_sources.push_back(&scene_light);
 
 	// scene objects
 	Sphere scene_sphere (O, 1, pretty_green);
 	Sphere scene_sphere2 (new_sphere_location, 0.5, maroon);
 	Plane scene_plane (Y, -1, tile_floor);
-	vector<Object*> scene_objects;
+	std::vector<Object*> scene_objects;
 	scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
 	scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere2));
 	scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
-	int thisone, aa_index;
+	int aa_index;
 	double xamnt, yamnt;
 	double tempRed, tempGreen, tempBlue;
 
-	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
-			thisone = y*width + x;
+	for (int x = 0; x < width; x++) {
+
 
 			// start with a blank pixel
 			double tempRed[aadepth*aadepth];
 			double tempGreen[aadepth*aadepth];
 			double tempBlue[aadepth*aadepth];
 
-			for (int aax = 0; aax < aadepth; aax++) {
-				for (int aay = 0; aay < aadepth; aay++) {
+			for (int aay = 0; aay < aadepth; aay++) {
+				for (int aax = 0; aax < aadepth; aax++) {
 
 					aa_index = aay*aadepth + aax;
 
@@ -381,7 +291,7 @@ int main (int argc, char *argv[]) {
 
 					Ray cam_ray (cam_ray_origin, cam_ray_direction);
 
-					vector<double> intersections;
+					std::vector<double> intersections;
 
 					for (int index = 0; index < scene_objects.size(); index++) {
 						intersections.push_back(scene_objects.at(index)->findIntersection(cam_ray));
@@ -421,9 +331,11 @@ int main (int argc, char *argv[]) {
 			for (int iRed = 0; iRed < aadepth*aadepth; iRed++) {
 				totalRed = totalRed + tempRed[iRed];
 			}
+
 			for (int iGreen = 0; iGreen < aadepth*aadepth; iGreen++) {
 				totalGreen = totalGreen + tempGreen[iGreen];
 			}
+
 			for (int iBlue = 0; iBlue < aadepth*aadepth; iBlue++) {
 				totalBlue = totalBlue + tempBlue[iBlue];
 			}
@@ -432,20 +344,12 @@ int main (int argc, char *argv[]) {
 			double avgGreen = totalGreen/(aadepth*aadepth);
 			double avgBlue = totalBlue/(aadepth*aadepth);
 
-			pixels[thisone].r = avgRed;
-			pixels[thisone].g = avgGreen;
-			pixels[thisone].b = avgBlue;
+			int const thisone = y *width + x;
+			pixels.push_back( { avgRed, avgGreen, avgBlue } );
+
+			//std::cout << avgRed << ' ' << ' ' << avgGreen << ' ' << ' ' << avgBlue << '\n';
 		}
 	}
 
-	savebmp("scene_anti-aliased.bmp",width,height,dpi,pixels);
-
-	delete pixels, tempRed, tempGreen, tempBlue;
-
-	t2 = clock();
-	float diff = ((float)t2 - (float)t1)/1000;
-
-	cout << diff << " seconds" << endl;
-
-	return 0;
+	saveRGB("scene_anti-aliased.ppm", width, height, pixels);
 }

@@ -2,15 +2,13 @@
 #define _COLOR_H
 
 class Color {
-	double r	= 0.5;
-	double g	= 0.5;
-	double b	= 0.5;
+	double r;
+	double g;
+	double b;
 
-	double special	= 0;
+	double special;
 
 public:
-	Color() = default;
-
 	Color(double const r, double const g, double const b, double const special = 0) :
 			r(r),
 			g(g),

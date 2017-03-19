@@ -4,14 +4,12 @@
 #include "Vect.h"
 
 class Camera {
-	Vect pos	= Vect(0, 0, 0);
-	Vect dir	= Vect(0, 0, 1);
-	Vect right	= Vect(0, 0, 0);
-	Vect down	= Vect(0, 0, 0);
+	Vect pos;
+	Vect dir;
+	Vect right;
+	Vect down;
 
 public:
-	Camera() = default;
-
 	Camera(const Vect &pos, const Vect &dir, const Vect &right, const Vect &down) :
 				pos	(pos	),
 				dir	(dir	),
@@ -20,9 +18,9 @@ public:
 
 public:
 	const Vect &getCameraPosition() const	{ return pos;	}
-	const Vect &getCameraDirection() const	{ return dir;	}
-	const Vect &getCameraRight() const	{ return right;	}
-	const Vect &getCameraDown() const	{ return down;	}
+//	const Vect &getCameraDirection() const	{ return dir;	}
+//	const Vect &getCameraRight() const	{ return right;	}
+//	const Vect &getCameraDown() const	{ return down;	}
 };
 
 #endif

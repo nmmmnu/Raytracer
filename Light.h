@@ -6,19 +6,17 @@
 
 
 class Light {
-	Vect  pos	= Vect(0, 0, 0);
-	Color color	= Color(1, 1, 1, 0);
+	Vect  pos;
+	Color color;
 
 public:
-	Light() = default;
-
 	Light(const Vect &pos, const Color &color) :
 			pos(pos),
 			color(color){}
 
 public:
-//	const Vect &getLightPosition() const {
-	Vect getLightPosition() const{
+	const Vect &getLightPosition() const {
+//	Vect getLightPosition() const{
 		return pos;
 	}
 
