@@ -138,21 +138,29 @@ Color traceColor(const Object *obj, const Vect &intersection_position, const Vec
 	return final_color.clip();
 }
 
-void render(int const width, int const height, RGBVector &pixels,
+void render(const char *filename, int const width, int const height,
 		const SceneObjects &scene_objects, const SceneLights &scene_lights,
 		const Camera &camera){
 
+	std::ofstream file = RGB::writeRGBHeader(filename, width, height);
+
 	std::vector<IntersectionPair> intersections;
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
+	for (int yyy = 0; yyy < height; ++yyy) {
+		// reverse image inside the eye
+		int const y = height - yyy;
+
+		for (int xxx = 0; xxx < width; ++xxx) {
+			// reverse image inside the eye
+			int const x = width - xxx;
+
 			const Ray &camera_ray = camera.getRay(x, y);
 
 			intersectVector(camera_ray, scene_objects, intersections);
 
 			if (intersections.empty()){
 				// set the backgroung black
-				pixels.push_back( { 0, 0, 0 } );
+				file << RGB{ 0, 0, 0 };
 
 				continue;
 			}
@@ -174,8 +182,7 @@ void render(int const width, int const height, RGBVector &pixels,
 			const Color &color = obj->getColor();
 		#endif
 
-			pixels.push_back( { color.r, color.g, color.b } );
-
+			file << RGB{ color.r, color.g, color.b };
 		}
 	}
 }
@@ -187,9 +194,6 @@ int main (){
 
 	int const width  = 640;
 	int const height = 480;
-
-	RGBVector pixels;
-	pixels.reserve(width * height);
 
 	// Camera eye
 	const Camera &camera = Camera::create(width, height, { 3.00, 1.50, -4.00 } );
@@ -217,7 +221,6 @@ int main (){
 	,	dynamic_cast<const Object*>(&scene_plane	)
 	};
 
-	render(width, height, pixels, scene_objects, lights, camera);
+	render("scene_anti-aliased.ppm", width, height, scene_objects, lights, camera);
 
-	saveRGB("scene_anti-aliased.ppm", width, height, pixels);
 }

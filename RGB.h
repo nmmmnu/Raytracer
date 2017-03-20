@@ -3,34 +3,37 @@
 
 #include <vector>
 #include <fstream>
-#include <iostream>
 
 struct RGB {
 	double r;
 	double g;
 	double b;
+
+	static std::ofstream writeRGBHeader(const char *filename, size_t const width, size_t const height) {
+		std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+
+		ofs << "P6\n" << width << " " << height << "\n255\n";
+
+		return ofs;
+	}
+
+	friend
+	std::ostream& operator <<(std::ostream& os, const RGB& rgb){
+		os	<< fix_(rgb.r)
+			<< fix_(rgb.g)
+			<< fix_(rgb.b)
+		;
+
+		return os;
+	}
+
+private:
+	constexpr
+	static unsigned char fix_(double const channel){
+		return (unsigned char) (std::min<double>(1, channel) * 255);
+	}
 };
 
-using RGBVector = std::vector<RGB>;
-
-inline std::ostream& operator <<(std::ostream& os, const RGB& rgb){
-	os	<< (unsigned char) (std::min<double>(1, rgb.r) * 255)
-		<< (unsigned char) (std::min<double>(1, rgb.g) * 255)
-		<< (unsigned char) (std::min<double>(1, rgb.b) * 255)
-	;
-
-	return os;
-}
-
-inline void saveRGB(const char *filename, size_t const width, size_t const height, const RGBVector &data) {
-	std::ofstream ofs("./untitled.ppm", std::ios::out | std::ios::binary);
-
-	ofs << "P6\n" << width << " " << height << "\n255\n";
-
-	for(auto it = data.rbegin(); it != data.rend(); ++it){
-    		ofs << *it;
-	}
-}
 
 #endif
 
