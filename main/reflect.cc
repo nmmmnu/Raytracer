@@ -38,7 +38,7 @@ int main (){
 
 	using raytracer::Plane;
 
-	const Plane  scene_plane	( -1.2, { 0.9, 0.9, 0.9, 0.1 }	);
+	const Plane  scene_plane	( -1.2, { 0.1, 0.1, 0.1, 0.2 }, { 0.9, 0.9, 0.9, 0.2 }	);
 
 	using raytracer::Object;
 

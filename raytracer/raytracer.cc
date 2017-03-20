@@ -26,9 +26,8 @@ namespace{
 		const SceneObjects &scene_objects, const SceneLights &light_sources, const unsigned recursion = 0) {
 
 		double const ambientlight = 0.2;
-		double const accuracy     = 0.00000001;
 
-		const Color &obj_color  = obj->getColor();
+		const Color &obj_color  = obj->getColor(intersection_position);
 		const Vect  &obj_normal = obj->normalAt(intersection_position);
 
 		Color final_color = obj_color * ambientlight;
@@ -62,7 +61,7 @@ namespace{
 
 				// reflection ray missed everthing else
 
-				if (t > accuracy){
+				if (t > ACCURACY){
 					// determine the position and direction at the point of intersection with the reflection ray
 					// the ray only affects the color if it reflected off something
 
@@ -101,7 +100,7 @@ namespace{
 
 				bool shadowed = false;
 				for (const auto &p : secondary_intersections){
-					if (p.first > accuracy && p.first <= distance_to_light_magnitude){
+					if (p.first > ACCURACY && p.first <= distance_to_light_magnitude){
 						shadowed = true;
 						break;
 					}

@@ -27,12 +27,16 @@ public:
 		return color;
 	}
 
-	Vect normalAt(const Vect &point) const override{
+	const Color &getColor(const Vect &) const override{
+		return color;
+	}
+
+private:
+	Vect normalAt_(const Vect &point) const override{
 		// normal always points away from the center of a sphere
 		return ( point + center.negative() ).normalize();
 	}
 
-private:
 	bool intersection_(const Ray &ray, double &t) const override{
 		double const a = 1; // normalized
 
@@ -58,12 +62,12 @@ private:
 			swap(t0, t1);
 		}
 
-		if (t0 > 0){
+		if (t0 > ACCURACY){
 			t = t0;
 			return true;
 		}
 
-		if (t1 > 0){
+		if (t1 > ACCURACY){
 			t = t1;
 			return true;
 		}

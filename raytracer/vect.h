@@ -38,7 +38,6 @@ public:
 		return sqrt(magnitude2());
 	}
 
-	constexpr
 	Vect normalize() const{
 		double const m = magnitude();
 		return Vect (

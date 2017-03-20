@@ -9,11 +9,13 @@ constexpr int width  = 640;
 constexpr int height = 480;
 
 const char *hello[] = {
-	"x x xxx x   x   xxx" ,
-	"x x x   x   x   x x" ,
-	"xxx xxx x   x   x x" ,
-	"x x x   x   x   x x" ,
-	"x x xxx xxx xxx xxx" ,
+	"x  x  xxxx  x     x     xxxx" ,
+	"x  x  x     x     x     x  x" ,
+	"x  x  x     x     x     x  x" ,
+	"xxxx  xxxx  x     x     x  x" ,
+	"x  x  x     x     x     x  x" ,
+	"x  x  x     x     x     x  x" ,
+	"x  x  xxxx  xxxx  xxxx  xxxx" ,
 	nullptr
 };
 
@@ -39,14 +41,12 @@ int main (){
 	using raytracer::Sphere;
 
 
-	const Color color = { 1.0, 1.0, 1.0, 0.25 };
+	const Color color = { 1.0, 1.0, 0.7, 0.33 };
 
 	double const radius = 0.25;
 	double const c = - radius * 1.20;
 	double const cx = 2.5;
 	double const cy = 0.5;
-
-	double const c3 = - 0.25;
 
 	std::vector<Sphere> scene_spheres;
 
@@ -55,7 +55,7 @@ int main (){
 			std::cout << hello[y][x];
 
 			if (hello[y][x] == 'x'){
-				scene_spheres.push_back( { { cx + x * c, cy + y * c, y * c3     }, radius, color } );
+				scene_spheres.push_back( { { cx + x * c, cy + y * c, 0 }, radius * 1.25, color } );
 			}
 		}
 
@@ -65,7 +65,7 @@ int main (){
 
 	using raytracer::Plane;
 
-	const Plane plane{ -1.8, Color::GREY	};
+	const Plane  scene_plane{ -1.8, { 0.1, 0.1, 0.3, 0.2 }, { 0.7, 0.7, 0.9, 0.2 }	};
 
 	using raytracer::Object;
 
@@ -74,7 +74,7 @@ int main (){
 	for (const Sphere &sphere : scene_spheres)
 		scene_objects.push_back( dynamic_cast<const Object*>(&sphere) );
 
-		scene_objects.push_back( dynamic_cast<const Object*>(&plane) );
+		scene_objects.push_back( dynamic_cast<const Object*>(&scene_plane) );
 
 	// Render
 

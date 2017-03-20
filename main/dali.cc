@@ -29,25 +29,25 @@ int main (){
 
 	using raytracer::Sphere;
 
-	const Color color = { 0.5, 1.0, 0.5 };
+	const Color color = { 0.5, 1.0, 0.5, 0.1 };
 	double const radius = 1;
 	double const c = 0.40;
 
 	const Sphere scene_spheres[] = {
-		{ {  -c,  -c, -c },  radius, color	},
-		{ {   c,  -c, -c },  radius, color	},
-		{ {  -c,   c, -c },  radius, color	},
-		{ {   c,   c, -c },  radius, color	},
-
-		{ {  -c,  -c,  c },  radius, color	},
-		{ {   c,  -c,  c },  radius, color	},
-		{ {  -c,   c,  c },  radius, color	},
-		{ {   c,   c,  c },  radius, color	}
+		{ { -c, -c, -c }, radius, color	},
+		{ {  c, -c, -c }, radius, color	},
+		{ { -c,  c, -c }, radius, color	},
+		{ {  c,  c, -c }, radius, color	},
+                                  
+		{ { -c, -c,  c }, radius, color	},
+		{ {  c, -c,  c }, radius, color	},
+		{ { -c,  c,  c }, radius, color	},
+		{ {  c,  c,  c }, radius, color	}
 	};
 
 	using raytracer::Plane;
 
-	const Plane plane{ -1.8, Color::GREY	};
+	const Plane plane{ -1.8, { 0.33, 0.33, 0.33, 0.1 }, { 0.66, 0.66, 0.66, 0.2 } };
 
 	using raytracer::Object;
 

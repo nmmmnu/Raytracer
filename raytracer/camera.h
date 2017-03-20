@@ -35,7 +35,6 @@ private:
 	}
 
 public:
-	constexpr
 	static Camera create(int const width, int const height,
 			const Vect &pos, const Vect &look = { 0, 0, 0 }){
 
@@ -51,7 +50,6 @@ public:
 	}
 
 public:
-	constexpr
 	Ray getRay(int const x, int const y) const{
 		const auto &p = calcAspectRatio_(x, y);
 		double const xx = p.first;
