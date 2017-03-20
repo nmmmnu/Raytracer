@@ -30,11 +30,11 @@ int main (){
 	using raytracer::Sphere;
 
 	double const c = 1.2;
-	double const s = c * sqrt(2);
+	double const s = c * M_SQRT2;
 
 	const Sphere scene_sphere1	{ { -c, 0, 0 }, 1.00, { 0.25, 1.00, 0.25, 0.3 }	};
 	const Sphere scene_sphere2	{ { +c, 0, 0 }, 1.00, { 1.00, 0.25, 0.25, 0.3 }	};
-	const Sphere scene_sphere3	{ { 0,  0, s }, 1.00, { 0.25, 0.25, 1.00, 0.3 }	};
+	const Sphere scene_sphere3	{ {  0, 0, s }, 1.00, { 0.25, 0.25, 1.00, 0.3 }	};
 
 	using raytracer::Plane;
 
