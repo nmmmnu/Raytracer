@@ -2,6 +2,7 @@
 #define _COLOR_H
 
 class Color {
+public:
 	double r;
 	double g;
 	double b;
@@ -9,28 +10,56 @@ class Color {
 	double special;
 
 public:
-	Color(double const r, double const g, double const b, double const special = 0) :
+	static const Color BLACK	;
+	static const Color GREY		;
+	static const Color WHITE	;
+
+	static const Color RED		;
+	static const Color GREEN	;
+	static const Color BLUE		;
+
+	static const Color YELLOW	;
+
+public:
+	constexpr Color(double const r, double const g, double const b, double const special = 0) :
 			r(r),
 			g(g),
 			b(b),
 			special(special){}
 
 public:
-	double getColorRed()		const { return r; }
-	double getColorGreen()		const { return g; }
-	double getColorBlue()		const { return b; }
-	double getColorSpecial()	const { return special; }
-
-	double setColorRed(double rv) { r = rv; }
-	double setColorGreen(double gv) { g = gv; }
-	double setColorBlue(double bv) { b = bv; }
-	double setColorSpecial(double sv) { special = sv; }
-
-	double brightness() const {
-		return(r + g + b) / 3;
+	constexpr
+	double brightness2() const {
+		return r + g + b;
 	}
 
-	Color colorScalar(double const scalar) const{
+	constexpr
+	double brightness() const {
+		return brightness2() / 3;
+	}
+
+	constexpr
+	Color operator + (const Color &c) const{
+		return Color(
+				r + c.r,
+				g + c.g,
+				b + c.b,
+				special
+		);
+	}
+
+	constexpr
+	Color operator * (const Color &c) const{
+		return Color(
+				r * c.r,
+				g * c.g,
+				b * c.b,
+				special
+		);
+	}
+
+	constexpr
+	Color operator * (double const scalar) const{
 		return Color(
 				r * scalar,
 				g * scalar,
@@ -39,58 +68,42 @@ public:
 		);
 	}
 
-	Color colorAdd(const Color &color) const{
+	constexpr
+	Color colorAverage(const Color &c) const{
 		return Color(
-				r + color.r,
-				g + color.g,
-				b + color.b,
-				special
-		);
-	}
-
-	Color colorMultiply(const Color &color) const{
-		return Color(
-				r * color.r,
-				g * color.g,
-				b * color.b,
-				special
-		);
-	}
-
-	Color colorAverage(const Color &color) const{
-		return Color(
-			(r + color.r) / 2,
-			(g + color.g) / 2,
-			(b + color.b) / 2,
+			(r + c.r) / 2,
+			(g + c.g) / 2,
+			(b + c.b) / 2,
 			special
 		);
 	}
 
+	constexpr
 	Color clip() const{
-		double const alllight    = r + g + b;
-		double const excesslight = alllight - 3;
+		double const all_light    = brightness2();
+		double const excess_light = all_light - 3;
 
-		double rr = r;
-		double gg = g;
-		double bb = b;
-
-		if (excesslight > 0) {
-			rr += excesslight * (r / alllight);
-			gg += excesslight * (g / alllight);
-			bb += excesslight * (b / alllight);
-		}
+		if (excess_light <= 0)
+			return *this;
 
 		return Color(
-			clamp_(rr),
-			clamp_(gg),
-			clamp_(bb),
+			clip__(r, all_light, excess_light),
+			clip__(g, all_light, excess_light),
+			clip__(b, all_light, excess_light),
+
 			special
 		);
 	}
 
 private:
+	constexpr
+	inline static double clip__(double const a, double const all_light, double const excess_light){
+		return clamp__( a + excess_light * (a / all_light) );
+	}
+
 	template <typename T>
-	static T clamp_(T const val, T const min = 0, T const max = 1){
+	constexpr
+	static T clamp__(T const val, T const min = 0, T const max = 1){
 		if (val < min)
 			return min;
 
@@ -100,5 +113,15 @@ private:
 		return val;
 	}
 };
+
+constexpr Color Color::BLACK	{ 0.0, 0.0, 0.0 };
+constexpr Color Color::GREY	{ 0.5, 0.5, 0.5 };
+constexpr Color Color::WHITE	{ 1.0, 1.0, 1.0 };
+
+constexpr Color Color::RED	{ 1.0, 0.0, 0.0 };
+constexpr Color Color::GREEN	{ 0.0, 1.0, 0.0 };
+constexpr Color Color::BLUE	{ 0.0, 0.0, 1.0 };
+
+constexpr Color Color::YELLOW	= Color::RED + Color::GREEN;
 
 #endif

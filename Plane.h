@@ -3,42 +3,61 @@
 
 #include "Object.h"
 
-#include <cmath>
-
 class Plane : public Object {
+private:
+	static const Vect Y;
+
+public:
 	Vect   normal;
-	Color  color;
 	double distance;
+	Color  color;
 
 public:
-	Plane(const Vect &normal, double distance, const Color &color) :
+	// the normala is perpendicular to the plane
+	// the distance is the distance from the (0, 0, 0)
+	constexpr
+	Plane(const Vect &normal, double const distance, const Color &color) :
 			normal		(normal		),
-			color		(color		),
-			distance	(distance	){}
+			distance	(distance	),
+			color		(color		){}
+
+	constexpr
+	Plane(double const distance, const Color &color):
+			Plane(Vect::Y, distance, color){}
 
 public:
-	const Vect &getPlaneNormal() const	{ return normal;		}
-	double getPlaneDistance() const		{ return distance;		}
+	const char *getName() const override{
+		return "plane";
+	}
 
 	const Color &getColor() const override{
 		return color;
 	}
 
-	Vect getNormalAt(const Vect &point) const override {
+	Vect normalAt(const Vect &point) const override {
 		return normal;
 	}
 
-	double findIntersection(const Ray &ray) const override{
-		double const a = ray.getRayDirection().dotProduct(normal);
+private:
+	bool intersection_(const Ray &ray, double &t) const override{
+		double const a = ray.dir.dotProduct(normal);
 
 		if (a == 0) {
 			// ray is parallel to the plane
-			return -1;
+			return false;
 		}
 
-		double const b = normal.dotProduct(ray.getRayOrigin().vectAdd(normal.vectMult(distance).negative()));
-		return - b / a;
+		double const b = normal.dotProduct(
+			ray.origin + (normal * distance).negative()
+		);
+
+		t =  - b / a;
+
+		return true;
 	}
+
+
 };
 
 #endif
+

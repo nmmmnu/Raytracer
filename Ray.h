@@ -4,18 +4,15 @@
 #include "Vect.h"
 
 class Ray {
+public:
 	Vect origin;
 	Vect dir;
 
 public:
+	constexpr
 	Ray(const Vect &origin, const Vect &dir) :
 			origin(origin),
 			dir(dir){}
-
-public:
-	const Vect &getRayOrigin() const	{ return origin; }
-	const Vect &getRayDirection() const	{ return dir;	 }
-
 };
 
 #endif

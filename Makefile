@@ -1,12 +1,11 @@
 OBJ = main.o
 INC = -I "./"
 
-Rasterrain: $(OBJ)
-	g++ $(OBJ) -o Rasterrain
-	rm -f $(OBJ)
+Rasterrain: main.o
+	g++ main.o -o Rasterrain
 
-main.o:
-	g++ -c main.cpp $(INC)
+main.o: main.cc *.h
+	g++ -Wall -Wconversion -c main.cc
 
 clean:
-	rm -f $(OBJ) Rasterrain
+	rm -f *.o Rasterrain

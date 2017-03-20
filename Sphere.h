@@ -1,95 +1,104 @@
 #ifndef _SPHERE_H
 #define _SPHERE_H
 
-#include "math.h"
 #include "Object.h"
 #include "Vect.h"
 #include "Color.h"
 
 class Sphere : public Object {
+public:
 	Vect   center;
 	Color  color;
 	double radius;
 
 public:
+	constexpr
 	Sphere (const Vect &center, double radius, const Color &color) :
 				center	(center	),
 				color	(color	),
 				radius	(radius	){}
 
 public:
-	const Vect &getSphereCenter() const	{ return center;	}
-	double getSphereRadius() const		{ return radius;	}
+	const char *getName() const override{
+		return "sphere";
+	}
 
 	const Color &getColor() const override{
 		return color;
 	}
 
-	Vect getNormalAt(const Vect &point) const override{
+	Vect normalAt(const Vect &point) const override{
 		// normal always points away from the center of a sphere
-		return point.vectAdd(center.negative()).normalize();
+		return ( point + center.negative() ).normalize();
 	}
 
-	double findIntersection(const Ray &ray) const override{
-		const Vect &ray_origin = ray.getRayOrigin();
+private:
+	bool intersection_(const Ray &ray, double &t) const override{
+		double const a = 1; // normalized
 
-		double ray_origin_x = ray_origin.getVectX();
-		double ray_origin_y = ray_origin.getVectY();
-		double ray_origin_z = ray_origin.getVectZ();
+		double const b =
+			(2 * (ray.origin.x - center.x) * ray.dir.x) +
+			(2 * (ray.origin.y - center.y) * ray.dir.y) +
+			(2 * (ray.origin.z - center.z) * ray.dir.z);
 
-		const Vect &ray_direction = ray.getRayDirection();
+		double const c =
+			square__(ray.origin.x - center.x) +
+			square__(ray.origin.y - center.y) +
+			square__(ray.origin.z - center.z) - square__(radius);
 
-		double ray_direction_x = ray_direction.getVectX();
-		double ray_direction_y = ray_direction.getVectY();
-		double ray_direction_z = ray_direction.getVectZ();
+		double t0, t1;
 
-		const Vect &sphere_center = center;
-
-		double sphere_center_x = sphere_center.getVectX();
-		double sphere_center_y = sphere_center.getVectY();
-		double sphere_center_z = sphere_center.getVectZ();
-
-		double a = 1; // normalized
-
-		double b =	(2 * (ray_origin_x - sphere_center_x) * ray_direction_x) +
-				(2 * (ray_origin_y - sphere_center_y) * ray_direction_y) +
-				(2 * (ray_origin_z - sphere_center_z) * ray_direction_z);
-
-		double c =	sqr__(ray_origin_x - sphere_center_x) +
-				sqr__(ray_origin_y - sphere_center_y) +
-				sqr__(ray_origin_z - sphere_center_z) - sqr__(radius);
-
-		double discriminant = b * b - 4 * c;
-
-		if (discriminant > 0) {
-			// the ray intersects the sphere
-
-			double sqrt_discriminant = sqrt(discriminant);
-
-			double const ZERO = 0.000001;
-
-			// the first root
-			double root_1 = (- b - sqrt_discriminant) / 2 - ZERO;
-
-			if (root_1 > 0) {
-				// the first root is the smallest positive root
-				return root_1;
-			}
-
-			// the second root is the smallest positive root
-			double root_2 = (- b + sqrt_discriminant) / 2 - ZERO;
-			return root_2;
+		if ( solveQuadratic__(a, b, c, t0, t1) == false){
+			// the ray missed the sphere
+			return false;
 		}
 
-		// the ray missed the sphere
-		return -1;
+		if (t0 > t1){
+			using std::swap;
+			swap(t0, t1);
+		}
+
+		if (t0 > 0){
+			t = t0;
+			return true;
+		}
+
+		if (t1 > 0){
+			t = t1;
+			return true;
+		}
+
+		// both roots are negative
+		return false;
 	}
 
 private:
 	template <typename T>
-	static T sqr__(T const a){
+	static T square__(T const a){
 		return a * a;
 	}
+
+	// https://www.scratchapixel.com/code.php?id=10&origin=/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes
+	static bool solveQuadratic__(double const a, double const b, double const c, double &x0, double &x1){
+		double const discriminant = b * b - 4 * a * c;
+
+		if (discriminant < 0)
+			return false;
+
+		if (discriminant == 0) {
+			x0 = x1 = - 0.5 * b / a;
+		}
+
+		double const q = b > 0 ?
+			-0.5 * (b + sqrt(discriminant)) :
+			-0.5 * (b - sqrt(discriminant));
+
+		x0 = q / a;
+		x1 = c / q;
+
+		return true;
+	}
+
 };
 
 #endif

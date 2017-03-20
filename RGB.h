@@ -14,13 +14,9 @@ struct RGB {
 using RGBVector = std::vector<RGB>;
 
 inline std::ostream& operator <<(std::ostream& os, const RGB& rgb){
-//	os	<< (unsigned char) (std::min<double>(1, rgb.r) * 255)
-//		<< (unsigned char) (std::min<double>(1, rgb.g) * 255)
-//		<< (unsigned char) (std::min<double>(1, rgb.b) * 255)
-
-	os	<< (int) (std::min<double>(1, rgb.r) * 255) << " "
-		<< (int) (std::min<double>(1, rgb.g) * 255) << " "
-		<< (int) (std::min<double>(1, rgb.b) * 255) << "    "
+	os	<< (unsigned char) (std::min<double>(1, rgb.r) * 255)
+		<< (unsigned char) (std::min<double>(1, rgb.g) * 255)
+		<< (unsigned char) (std::min<double>(1, rgb.b) * 255)
 	;
 
 	return os;
@@ -29,8 +25,7 @@ inline std::ostream& operator <<(std::ostream& os, const RGB& rgb){
 inline void saveRGB(const char *filename, size_t const width, size_t const height, const RGBVector &data) {
 	std::ofstream ofs("./untitled.ppm", std::ios::out | std::ios::binary);
 
-//	ofs << "P6\n" << width << " " << height << "\n255\n";
-	ofs << "P3\n" << width << " " << height << "\n255\n";
+	ofs << "P6\n" << width << " " << height << "\n255\n";
 
 	for(auto it = data.rbegin(); it != data.rend(); ++it){
     		ofs << *it;
