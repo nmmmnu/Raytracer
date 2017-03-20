@@ -7,10 +7,14 @@ include Makefile.sub
 
 RAYTRACER_O = $(O)raytracer.o $(O)vect.o $(O)color.o
 
-all: $(A)water $(A)dali
+all: $(A)water $(A)dali $(A)hello
 
 $(A)water: $(O)water.o $(RAYTRACER_O)
 	$(LINK)
 
 $(A)dali: $(O)dali.o $(RAYTRACER_O)
 	$(LINK)
+
+$(A)hello: $(O)hello.o $(RAYTRACER_O)
+	$(LINK)
+
