@@ -1,6 +1,7 @@
 #include "raytracer.h"
 
 #include <algorithm>	// min_element
+#include <iostream>
 
 #define VISUALIZE_COLORS_ONLY 0
 
@@ -15,13 +16,14 @@ namespace{
 
 		for(const auto *obj : objects){
 			double t;
-			if ( obj->intersection(ray, t) )
+			if ( obj->intersection(ray, t) ){
 				intersections.push_back( std::make_pair(t, obj) );
+			}
 		}
 	}
 
 	Color traceColor(const Object *obj, const Vect &intersection_position, const Vect &intersecting_ray_direction,
-		const SceneObjects &scene_objects, const SceneLights &light_sources) {
+		const SceneObjects &scene_objects, const SceneLights &light_sources, const unsigned recursion = 0) {
 
 		double const ambientlight = 0.2;
 		double const accuracy     = 0.00000001;
@@ -33,8 +35,50 @@ namespace{
 
 
 		/* shine code goes here */
+		const unsigned MAX_RECURSION = 1000;
 
+		if (recursion < MAX_RECURSION)
+		if (obj_color.special > 0 && obj_color.special <= 1) {
+			// reflection from objects with specular intensity
+			double const dot1 = obj_normal.dotProduct(intersecting_ray_direction.negative());
 
+			const Vect &scalar1 = obj_normal * dot1;
+			const Vect &add1    = scalar1 + intersecting_ray_direction;
+			const Vect &scalar2 = add1 * 2;
+			const Vect &add2    = intersecting_ray_direction.negative() + scalar2;
+			const Vect &reflection_direction = add2.normalize();
+
+			Ray reflection_ray (intersection_position, reflection_direction);
+
+			// determine what the ray intersects with first
+			std::vector<IntersectionPair> reflection_intersections;
+
+			intersectVector(reflection_ray, scene_objects, reflection_intersections);
+
+			if (! reflection_intersections.empty()){
+				const auto &p = *std::min_element(reflection_intersections.begin(), reflection_intersections.end());
+				double const t = p.first;
+				const auto *obj = p.second;
+
+				// reflection ray missed everthing else
+
+				if (t > accuracy){
+					// determine the position and direction at the point of intersection with the reflection ray
+					// the ray only affects the color if it reflected off something
+
+					Vect reflection_intersection_position = intersection_position + reflection_direction * t;
+
+					Vect reflection_intersection_ray_direction = reflection_direction;
+
+					Color reflection_intersection_color = traceColor(
+							obj,
+							reflection_intersection_position, reflection_intersection_ray_direction,
+							scene_objects, light_sources, recursion + 1);
+
+					final_color = final_color + reflection_intersection_color * obj_color.special;
+				}
+			}
+		}
 
 		std::vector<IntersectionPair> secondary_intersections;
 

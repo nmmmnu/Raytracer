@@ -7,6 +7,9 @@
 namespace raytracer{
 
 class Object {
+private:
+	static constexpr double ACCURACY = 0.00000001;
+
 public:
 	virtual const char *getName() const = 0;
 
@@ -17,7 +20,7 @@ public:
 	bool intersection(const Ray &ray, double &t) const{
 		bool const result = intersection_(ray, t);
 
-		return result && t < 0 ? false : result;
+		return result && t < ACCURACY ? false : result;
 	}
 
 private:

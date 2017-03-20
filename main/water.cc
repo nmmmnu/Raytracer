@@ -29,9 +29,12 @@ int main (){
 
 	using raytracer::Sphere;
 
-	const Sphere scene_sphere	( {  0.00,  0.00, 0.00 },  1.00, { 0.50, 1.00, 0.50, 0.3 }	);
-	const Sphere scene_sphere1	( { -0.80, -0.80, 0.00 },  0.80, Color::RED			);
-	const Sphere scene_sphere2	( {  0.80, -0.80, 0.00 },  0.80, Color::RED			);
+	Color color1{ 0.25, 1.00, 0.25, 0.3 };
+	Color color2{ 0.25, 0.25, 1.00, 0.3 };
+
+	const Sphere scene_sphere	( {  0.00,  0.00, 0.00 },  1.00, color1	);
+	const Sphere scene_sphere1	( { -0.80, -0.80, 0.00 },  0.80, color2	);
+	const Sphere scene_sphere2	( {  0.80, -0.80, 0.00 },  0.80, color2	);
 
 	using raytracer::Plane;
 

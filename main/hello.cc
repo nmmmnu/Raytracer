@@ -39,7 +39,8 @@ int main (){
 	using raytracer::Sphere;
 
 
-	const Color color = { 1.0, 1.0, 0.5 };
+	const Color color = { 1.0, 1.0, 1.0, 0.25 };
+
 	double const radius = 0.25;
 	double const c = - radius * 1.20;
 	double const cx = 2.5;
@@ -53,8 +54,9 @@ int main (){
 		for(int x = 0; hello[y][x]; ++x){
 			std::cout << hello[y][x];
 
-			if (hello[y][x] == 'x')
-				scene_spheres.push_back( { { cx + x * c, cy + y * c, y * c3 }, radius, color } );
+			if (hello[y][x] == 'x'){
+				scene_spheres.push_back( { { cx + x * c, cy + y * c, y * c3     }, radius, color } );
+			}
 		}
 
 		std::cout << '\n';
