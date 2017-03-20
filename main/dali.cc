@@ -29,7 +29,7 @@ int main (){
 
 	using raytracer::Sphere;
 
-	const Color color = { 0.5, 1.0, 0.5, 0.1 };
+	const Color color = { 0.6, 0.9, 0.6, 0.2 };
 	double const radius = 1;
 	double const c = 0.40;
 
