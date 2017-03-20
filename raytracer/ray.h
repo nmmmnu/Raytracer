@@ -1,7 +1,9 @@
-#ifndef _RAY_H
-#define _RAY_H
+#ifndef RAY_H_
+#define RAY_H_
 
-#include "Vect.h"
+#include "vect.h"
+
+namespace raytracer{
 
 class Ray {
 public:
@@ -14,6 +16,8 @@ public:
 			origin(origin),
 			dir(dir){}
 };
+
+} //namespace raytracer
 
 #endif
 

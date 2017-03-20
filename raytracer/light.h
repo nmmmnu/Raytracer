@@ -1,9 +1,10 @@
-#ifndef _Light_H
-#define _Light_H
+#ifndef LIGHT_H_
+#define LIGHT_H_
 
-#include "Vect.h"
-#include "Color.h"
+#include "vect.h"
+#include "color.h"
 
+namespace raytracer{
 
 class Light {
 public:
@@ -15,6 +16,8 @@ public:
 			pos(pos),
 			color(color){}
 };
+
+} //namespace raytracer
 
 #endif
 

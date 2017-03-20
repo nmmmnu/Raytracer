@@ -1,7 +1,9 @@
-#ifndef _VECT_H
-#define _VECT_H
+#ifndef VECT_H_
+#define VECT_H_
 
 #include <cmath>
+
+namespace raytracer{
 
 class Vect {
 public:
@@ -32,7 +34,6 @@ public:
 		;
 	}
 
-	constexpr
 	double magnitude() const{
 		return sqrt(magnitude2());
 	}
@@ -97,15 +98,12 @@ public:
 	}
 };
 
-constexpr Vect Vect::O{ 0, 0, 0 };
-constexpr Vect Vect::X{ 1, 0, 0 };
-constexpr Vect Vect::Y{ 0, 1, 0 };
-constexpr Vect Vect::Z{ 0, 0, 1 };
-
 constexpr
 inline Vect operator * (double const scalar, const Vect &vector){
 	return vector * scalar;
 }
+
+} //namespace raytracer
 
 #endif
 

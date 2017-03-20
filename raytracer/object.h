@@ -1,8 +1,10 @@
-#ifndef _OBJECT_H
-#define _OBJECT_H
+#ifndef OBJECT_H_
+#define OBJECT_H_
 
-#include "Ray.h"
-#include "Color.h"
+#include "ray.h"
+#include "color.h"
+
+namespace raytracer{
 
 class Object {
 public:
@@ -22,6 +24,8 @@ private:
 	virtual bool intersection_(const Ray &ray, double &t) const = 0;
 
 };
+
+} //namespace raytracer
 
 #endif
 

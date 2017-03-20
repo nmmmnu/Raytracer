@@ -1,15 +1,17 @@
-#ifndef _RGB_H
-#define _RGB_H
+#ifndef RGB_H_
+#define RGB_H_
 
 #include <vector>
 #include <fstream>
+
+namespace raytracer{
 
 struct RGB {
 	double r;
 	double g;
 	double b;
 
-	static std::ofstream writeRGBHeader(const char *filename, size_t const width, size_t const height) {
+	static std::ofstream writeRGBHeader(const char *filename, int const width, int const height) {
 		std::ofstream ofs(filename, std::ios::out | std::ios::binary);
 
 		ofs << "P6\n" << width << " " << height << "\n255\n";
@@ -34,6 +36,7 @@ private:
 	}
 };
 
+} //namespace raytracer
 
 #endif
 

@@ -1,7 +1,14 @@
+*.exe
 
-Rasterrain
+a.out
+
 
 *.o
-*.bmp
+*.d
+
 *.ppm
+
+bin/*
+obj/*
+data/*
 

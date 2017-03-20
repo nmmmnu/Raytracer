@@ -1,9 +1,9 @@
-#ifndef _SPHERE_H
-#define _SPHERE_H
+#ifndef SPHERE_H_
+#define SPHERE_H_
 
-#include "Object.h"
-#include "Vect.h"
-#include "Color.h"
+#include "object.h"
+
+namespace raytracer{
 
 class Sphere : public Object {
 public:
@@ -100,6 +100,8 @@ private:
 	}
 
 };
+
+} //namespace raytracer
 
 #endif
 

@@ -1,7 +1,9 @@
-#ifndef _Plane_H
-#define _Plane_H
+#ifndef PLANE_H_
+#define PLANE_H_
 
-#include "Object.h"
+#include "object.h"
+
+namespace raytracer{
 
 class Plane : public Object {
 private:
@@ -58,6 +60,8 @@ private:
 
 
 };
+
+} //namespace raytracer
 
 #endif
 

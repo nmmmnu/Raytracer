@@ -1,5 +1,7 @@
-#ifndef _COLOR_H
-#define _COLOR_H
+#ifndef COLOR_H_
+#define COLOR_H_
+
+namespace raytracer{
 
 class Color {
 public:
@@ -97,13 +99,12 @@ public:
 
 private:
 	constexpr
-	inline static double clip__(double const a, double const all_light, double const excess_light){
+	static double clip__(double const a, double const all_light, double const excess_light){
 		return clamp__( a + excess_light * (a / all_light) );
 	}
 
-	template <typename T>
 	constexpr
-	static T clamp__(T const val, T const min = 0, T const max = 1){
+	inline static double clamp__(double const val, double const min = 0, double const max = 1){
 		if (val < min)
 			return min;
 
@@ -114,14 +115,6 @@ private:
 	}
 };
 
-constexpr Color Color::BLACK	{ 0.0, 0.0, 0.0 };
-constexpr Color Color::GREY	{ 0.5, 0.5, 0.5 };
-constexpr Color Color::WHITE	{ 1.0, 1.0, 1.0 };
-
-constexpr Color Color::RED	{ 1.0, 0.0, 0.0 };
-constexpr Color Color::GREEN	{ 0.0, 1.0, 0.0 };
-constexpr Color Color::BLUE	{ 0.0, 0.0, 1.0 };
-
-constexpr Color Color::YELLOW	= Color::RED + Color::GREEN;
+} //namespace raytracer
 
 #endif

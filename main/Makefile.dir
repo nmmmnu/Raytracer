@@ -1,0 +1,16 @@
+
+SRC_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
+EXTRA_INCL += -I$(SRC_DIR)
+
+include Makefile.sub
+
+RAYTRACER_O = $(O)raytracer.o $(O)vect.o $(O)color.o
+
+all: $(A)water $(A)dali
+
+$(A)water: $(O)water.o $(RAYTRACER_O)
+	$(LINK)
+
+$(A)dali: $(O)dali.o $(RAYTRACER_O)
+	$(LINK)

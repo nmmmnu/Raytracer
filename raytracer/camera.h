@@ -1,10 +1,11 @@
-#ifndef _Camera_H
-#define _Camera_H
+#ifndef CAMERA_H_
+#define CAMERA_H_
 
-#include "Vect.h"
-#include "Ray.h"
+#include "ray.h"
 
 #include <utility>
+
+namespace raytracer{
 
 class Camera {
 private:
@@ -110,6 +111,8 @@ private:
 		// the image is square, not relevant
 	}
 };
+
+} //namespace raytracer
 
 #endif
 
