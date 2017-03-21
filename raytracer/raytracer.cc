@@ -7,7 +7,7 @@
 
 namespace raytracer{
 
-using IntersectionPair = std::pair<double, const Object *>;
+using IntersectionPair = std::pair<double, const iObject *>;
 
 namespace{
 
@@ -22,7 +22,7 @@ namespace{
 		}
 	}
 
-	Color traceColor(const Object *obj, const Vect &intersection_position, const Vect &intersecting_ray_direction,
+	Color traceColor(const iObject *obj, const Vect &intersection_position, const Vect &intersecting_ray_direction,
 		const SceneObjects &scene_objects, const SceneLights &light_sources, const unsigned recursion = 0) {
 
 		double const ambientlight = 0.2;

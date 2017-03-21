@@ -67,14 +67,14 @@ int main (){
 
 	const Plane  scene_plane{ -1.8, { 0.1, 0.1, 0.3, 0.2 }, { 0.7, 0.7, 0.9, 0.2 }	};
 
-	using raytracer::Object;
+	using raytracer::iObject;
 
 	raytracer::SceneObjects scene_objects;
 
 	for (const Sphere &sphere : scene_spheres)
-		scene_objects.push_back( dynamic_cast<const Object*>(&sphere) );
+		scene_objects.push_back( dynamic_cast<const iObject*>(&sphere) );
 
-		scene_objects.push_back( dynamic_cast<const Object*>(&scene_plane) );
+		scene_objects.push_back( dynamic_cast<const iObject*>(&scene_plane) );
 
 	// Render
 

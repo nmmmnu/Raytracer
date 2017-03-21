@@ -38,7 +38,7 @@ int main (){
 		{ {  c, -c, -c }, radius, color	},
 		{ { -c,  c, -c }, radius, color	},
 		{ {  c,  c, -c }, radius, color	},
-                                  
+
 		{ { -c, -c,  c }, radius, color	},
 		{ {  c, -c,  c }, radius, color	},
 		{ { -c,  c,  c }, radius, color	},
@@ -49,14 +49,14 @@ int main (){
 
 	const Plane plane{ -1.8, { 0.33, 0.33, 0.33, 0.1 }, { 0.66, 0.66, 0.66, 0.2 } };
 
-	using raytracer::Object;
+	using raytracer::iObject;
 
 	raytracer::SceneObjects scene_objects;
 
 	for (const Sphere &sphere : scene_spheres)
-		scene_objects.push_back( dynamic_cast<const Object*>(&sphere) );
+		scene_objects.push_back( dynamic_cast<const iObject*>(&sphere) );
 
-		scene_objects.push_back( dynamic_cast<const Object*>(&plane) );
+		scene_objects.push_back( dynamic_cast<const iObject*>(&plane) );
 
 	// Render
 

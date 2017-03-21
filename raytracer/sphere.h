@@ -1,11 +1,11 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
-#include "object.h"
+#include "iobject.h"
 
 namespace raytracer{
 
-class Sphere : public Object {
+class Sphere : public iObject {
 public:
 	Vect   center;
 	Color  color;

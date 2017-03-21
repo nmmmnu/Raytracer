@@ -1,11 +1,11 @@
 #ifndef PLANE_H_
 #define PLANE_H_
 
-#include "object.h"
+#include "iobject.h"
 
 namespace raytracer{
 
-class Plane : public Object {
+class Plane : public iObject {
 private:
 	static const Vect Y;
 
