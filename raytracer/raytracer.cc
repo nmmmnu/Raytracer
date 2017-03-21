@@ -34,7 +34,7 @@ namespace{
 
 
 		/* shine code goes here */
-		const unsigned MAX_RECURSION = 1000;
+		const unsigned MAX_RECURSION = 100;
 
 		if (recursion < MAX_RECURSION)
 		if (obj_color.special > 0 && obj_color.special <= 1) {

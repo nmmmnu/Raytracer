@@ -5,49 +5,21 @@
 
 namespace raytracer{
 
-class Plane : public iObject {
+class iPlane : public iObject {
 private:
 	static const Vect Y;
 
-public:
+private:
 	Vect   normal;
 	double distance;
-	Color  color1;
-	Color  color2;
 
 public:
 	// the normala is perpendicular to the plane
 	// the distance is the distance from the (0, 0, 0)
 	constexpr
-	Plane(const Vect &normal, double const distance, const Color &color1, const Color &color2) :
+	iPlane(const Vect &normal, double const distance) :
 			normal		(normal		),
-			distance	(distance	),
-			color1		(color1		),
-			color2		(color2		){}
-
-	constexpr
-	Plane(double const distance, const Color &color1, const Color &color2):
-			Plane(Vect::Y, distance, color1, color2){}
-
-	constexpr
-	Plane(double const distance, const Color &color):
-			Plane(distance, color, color){}
-
-public:
-	const char *getName() const override{
-		return "plane";
-	}
-
-	const Color &getColor() const override{
-		return color1;
-	}
-
-	const Color &getColor(const Vect &point) const override{
-		int const x = (int) floor(point.x);
-		int const z = (int) floor(point.z);
-
-		return ( x + z ) % 2 == 0 ? color1 : color2;
-	};
+			distance	(distance	){}
 
 private:
 	Vect normalAt_(const Vect &point) const override {
@@ -71,6 +43,85 @@ private:
 		return true;
 	}
 };
+
+// =====================
+
+class SimplePlane : public iPlane {
+private:
+	Color  color;
+public:
+	constexpr
+	SimplePlane(const Vect &normal, double const distance, const Color &color) :
+			iPlane(normal, distance),
+				color(color){}
+
+	constexpr
+	SimplePlane(double const distance, const Color &color):
+			SimplePlane(Vect::Y, distance, color){}
+
+	// compatibility c-tor
+	constexpr
+	SimplePlane(const Vect &normal, double const distance, const Color &color, const Color & ) :
+			SimplePlane(normal, distance, color){}
+
+	constexpr
+	SimplePlane(double const distance, const Color &color, const Color & ):
+			SimplePlane(Vect::Y, distance, color){}
+
+public:
+	const char *getName() const override{
+		return "plane.simple";
+	}
+
+	const Color &getColor() const override{
+		return color;
+	}
+
+	const Color &getColor(const Vect &point) const override{
+		return color;
+	}
+};
+
+// =====================
+
+class CheckerboardPlane : public iPlane {
+private:
+	Color  color[2];
+
+public:
+	constexpr
+	CheckerboardPlane(const Vect &normal, double const distance, const Color &color1, const Color &color2) :
+			iPlane(normal, distance),
+				color{ color1, color2 }{}
+
+	constexpr
+	CheckerboardPlane(double const distance, const Color &color1, const Color &color2):
+			CheckerboardPlane(Vect::Y, distance, color1, color2){}
+
+public:
+	const char *getName() const override{
+		return "plane.checkerboard";
+	}
+
+	const Color &getColor() const override{
+		return color[0];
+	}
+
+	const Color &getColor(const Vect &point) const override{
+		int const x = (int) round(point.x);
+		int const y = (int) round(point.y);
+		int const z = (int) round(point.z);
+
+		int const index = ( x + y + z ) % 2 == 0;
+
+		// branchless ;)
+		return color[index];
+	};
+};
+
+// =====================
+
+using Plane = CheckerboardPlane;
 
 } //namespace raytracer
 

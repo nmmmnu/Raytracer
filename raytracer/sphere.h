@@ -6,7 +6,7 @@
 namespace raytracer{
 
 class Sphere : public iObject {
-public:
+private:
 	Vect   center;
 	Color  color;
 	double radius;
