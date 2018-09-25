@@ -9,6 +9,12 @@ namespace raytracer{
 
 class iObject {
 public:
+	constexpr iObject() = default;
+	constexpr iObject(const iObject &other) = default;
+	constexpr iObject(iObject &&other) = default;
+
+	virtual ~iObject() = default;
+
 	virtual const char *getName() const = 0;
 	virtual const Color &getColor() const = 0;
 
