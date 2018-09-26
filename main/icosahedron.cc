@@ -34,28 +34,26 @@ int main (){
 
 	constexpr auto r    = 1.10;
 
-	constexpr auto phi  = 0.618;
+	constexpr auto M_PHI = 1.6180339887;
 
-	constexpr auto phi1 = 1 / phi; // 1.618
-
-	constexpr auto phi0 = phi1;
-
+	constexpr auto phi  = 1 - M_PHI;
+	constexpr auto Phi  = M_PHI;
 
 	const Sphere scene_icocahedron[] = {
-		{ {     0,    +1, +phi0 }, r, color2 },
-		{ {     0,    +1, -phi0 }, r, color2 },
-		{ {     0,    -1, +phi0 }, r, color2 },
-		{ {     0,    -1, -phi0 }, r, color2 },
+		{ {    0,   +1, +Phi }, r, color2 },
+		{ {    0,   +1, -Phi }, r, color2 },
+		{ {    0,   -1, +Phi }, r, color2 },
+		{ {    0,   -1, -Phi }, r, color2 },
 
-		{ {    +1, +phi0,     0 }, r, color2 },
-		{ {    +1, -phi0,     0 }, r, color2 },
-		{ {    -1, +phi0,     0 }, r, color2 },
-		{ {    -1, -phi0,     0 }, r, color2 },
+		{ {   +1, +Phi,    0 }, r, color2 },
+		{ {   +1, -Phi,    0 }, r, color2 },
+		{ {   -1, +Phi,    0 }, r, color2 },
+		{ {   -1, -Phi,    0 }, r, color2 },
 
-		{ { +phi0,     0,    +1 }, r, color2 },
-		{ { -phi0,     0,    +1 }, r, color2 },
-		{ { +phi0,     0,    -1 }, r, color2 },
-		{ { -phi0,     0,    -1 }, r, color2 }
+		{ { +Phi,    0,   +1 }, r, color2 },
+		{ { -Phi,    0,   +1 }, r, color2 },
+		{ { +Phi,    0,   -1 }, r, color2 },
+		{ { -Phi,    0,   -1 }, r, color2 }
 	};
 
 	const Sphere scene_dodecahedron[] = {
@@ -68,20 +66,20 @@ int main (){
 		{ { -1, -1, +1 }, r, color1 },
 		{ { -1, -1, -1 }, r, color1 },
 
-		{ {     0, +phi1,  +phi }, r, color1 },
-		{ {     0, +phi1,  -phi }, r, color1 },
-		{ {     0, -phi1,  +phi }, r, color1 },
-		{ {     0, -phi1,  -phi }, r, color1 },
+		{ {    0, +Phi, +phi }, r, color1 },
+		{ {    0, +Phi, -phi }, r, color1 },
+		{ {    0, -Phi, +phi }, r, color1 },
+		{ {    0, -Phi, -phi }, r, color1 },
 
-		{ {  +phi,     0, +phi1 }, r, color1 },
-		{ {  -phi,     0, +phi1 }, r, color1 },
-		{ {  +phi,     0, -phi1 }, r, color1 },
-		{ {  -phi,     0, -phi1 }, r, color1 },
+		{ { +phi,    0, +Phi }, r, color1 },
+		{ { -phi,    0, +Phi }, r, color1 },
+		{ { +phi,    0, -Phi }, r, color1 },
+		{ { -phi,    0, -Phi }, r, color1 },
 
-		{ { +phi1,  +phi,     0 }, r, color1 },
-		{ { +phi1,  -phi,     0 }, r, color1 },
-		{ { -phi1,  +phi,     0 }, r, color1 },
-		{ { -phi1,  -phi,     0 }, r, color1 }
+		{ { +Phi,  +phi,   0 }, r, color1 },
+		{ { +Phi,  -phi,   0 }, r, color1 },
+		{ { -Phi,  +phi,   0 }, r, color1 },
+		{ { -Phi,  -phi,   0 }, r, color1 }
 	};
 
 	using raytracer::Plane;
