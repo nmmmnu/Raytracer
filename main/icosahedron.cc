@@ -34,26 +34,28 @@ int main (){
 
 	constexpr auto r    = 1.10;
 
-	constexpr auto phi0 = 1.618;
-	constexpr auto phi1 = 0.618;
+	constexpr auto phi  = 0.618;
 
-	constexpr auto phi  = phi0;
+	constexpr auto phi1 = 1 / phi; // 1.618
+
+	constexpr auto phi0 = phi1;
+
 
 	const Sphere scene_icocahedron[] = {
-		{ {    0,   +1, +phi }, r, color2 },
-		{ {    0,   +1, -phi }, r, color2 },
-		{ {    0,   -1, +phi }, r, color2 },
-		{ {    0,   -1, -phi }, r, color2 },
+		{ {     0,    +1, +phi0 }, r, color2 },
+		{ {     0,    +1, -phi0 }, r, color2 },
+		{ {     0,    -1, +phi0 }, r, color2 },
+		{ {     0,    -1, -phi0 }, r, color2 },
 
-		{ {   +1, +phi,    0 }, r, color2 },
-		{ {   +1, -phi,    0 }, r, color2 },
-		{ {   -1, +phi,    0 }, r, color2 },
-		{ {   -1, -phi,    0 }, r, color2 },
+		{ {    +1, +phi0,     0 }, r, color2 },
+		{ {    +1, -phi0,     0 }, r, color2 },
+		{ {    -1, +phi0,     0 }, r, color2 },
+		{ {    -1, -phi0,     0 }, r, color2 },
 
-		{ { +phi,    0,   +1 }, r, color2 },
-		{ { -phi,    0,   +1 }, r, color2 },
-		{ { +phi,    0,   -1 }, r, color2 },
-		{ { -phi,    0,   -1 }, r, color2 }
+		{ { +phi0,     0,    +1 }, r, color2 },
+		{ { -phi0,     0,    +1 }, r, color2 },
+		{ { +phi0,     0,    -1 }, r, color2 },
+		{ { -phi0,     0,    -1 }, r, color2 }
 	};
 
 	const Sphere scene_dodecahedron[] = {
@@ -66,31 +68,29 @@ int main (){
 		{ { -1, -1, +1 }, r, color1 },
 		{ { -1, -1, -1 }, r, color1 },
 
-		{ {     0, +phi0, +phi1 }, r, color1 },
-		{ {     0, +phi0, -phi1 }, r, color1 },
-		{ {     0, -phi0, +phi1 }, r, color1 },
-		{ {     0, -phi0, -phi1 }, r, color1 },
+		{ {     0, +phi1,  +phi }, r, color1 },
+		{ {     0, +phi1,  -phi }, r, color1 },
+		{ {     0, -phi1,  +phi }, r, color1 },
+		{ {     0, -phi1,  -phi }, r, color1 },
 
-		{ { +phi1,     0, +phi0 }, r, color1 },
-		{ { -phi1,     0, +phi0 }, r, color1 },
-		{ { +phi1,     0, -phi0 }, r, color1 },
-		{ { -phi1,     0, -phi0 }, r, color1 },
+		{ {  +phi,     0, +phi1 }, r, color1 },
+		{ {  -phi,     0, +phi1 }, r, color1 },
+		{ {  +phi,     0, -phi1 }, r, color1 },
+		{ {  -phi,     0, -phi1 }, r, color1 },
 
-		{ { +phi0, +phi1,     0 }, r, color1 },
-		{ { +phi0, -phi1,     0 }, r, color1 },
-		{ { -phi0, +phi1,     0 }, r, color1 },
-		{ { -phi0, -phi1,     0 }, r, color1 }
+		{ { +phi1,  +phi,     0 }, r, color1 },
+		{ { +phi1,  -phi,     0 }, r, color1 },
+		{ { -phi1,  +phi,     0 }, r, color1 },
+		{ { -phi1,  -phi,     0 }, r, color1 }
 	};
 
 	using raytracer::Plane;
 
 	const Plane  scene_plane	( -3, { 0.1, 0.1, 0.1, 0.2 }, { 0.9, 0.9, 0.9, 0.2 }	);
 
-	using raytracer::iObject;
-
 	raytracer::SceneObjects scene_objects;
 
-	//scene_objects.reserve(sizeof(scene_sphere) / sizeof(Sphere) + 1);
+	scene_objects.reserve( sizeof(scene_icocahedron) / sizeof(Sphere) + sizeof(scene_dodecahedron) / sizeof(Sphere) + 1);
 
 	for (const auto &sphere : scene_icocahedron)
 		scene_objects.push_back(&sphere);
